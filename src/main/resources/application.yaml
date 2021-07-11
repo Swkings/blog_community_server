@@ -3,6 +3,32 @@ server:
   port: 8080
   servlet:
     context-path: /
-# logger
+
+# logger logback-spring.xml中配置了
 #logging:
-#  level: debug
+#  level.com.swking: debug
+#  file:
+#    path: C:\CodeSpace\JavaSpace\blog_community_server\log
+#    name: blog_community.log
+
+# DataSourceProperties
+spring:
+  thymeleaf:
+    cache: false
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog_community?characterEncoding=utf-8&useSSL=false&serverTimezone=Hongkong
+    username: root
+    password: swking0917
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+# MybatisProperties
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.swking.entity
+  configuration:
+    use-generated-keys: true
+    map-underscore-to-camel-case: true
