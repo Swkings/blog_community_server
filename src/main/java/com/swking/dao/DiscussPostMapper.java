@@ -1,8 +1,9 @@
 package com.swking.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.swking.entity.DiscussPost;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  **/
 
 @Mapper
-public interface DiscussPostMapper {
+public interface DiscussPostMapper extends BaseMapper<DiscussPost> {
     List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit);
 
     // @Param注解用于给参数取别名,

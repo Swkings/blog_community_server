@@ -1,5 +1,12 @@
 package com.swking.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
 import java.util.Date;
 
 /**
@@ -10,101 +17,27 @@ import java.util.Date;
  * @Desc :
  **/
 
+@Data
+@ApiModel(value = "帖子信息")
+@TableName(value = "discuss_post")
 public class DiscussPost {
-    private int id;
+    @ApiModelProperty(value = "帖子id")
+    @TableId(value = "id", type = IdType.AUTO)//指定自增策略
+    private Integer id;
+    @ApiModelProperty(value = "帖子所属用户")
     private int userId;
+    @ApiModelProperty(value = "标题")
     private String title;
+    @ApiModelProperty(value = "内容")
     private String content;
+    @ApiModelProperty(value = "类型 => 0: 普通; 1: 置顶")
     private int type;
+    @ApiModelProperty(value = "状态 => 0: 正常; 1: 精华; 2: 拉黑")
     private int status;
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
+    @ApiModelProperty(value = "评论数量")
     private int commentCount;
+    @ApiModelProperty(value = "评分")
     private double score;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
-    @Override
-    public String toString() {
-        return "DiscussPost{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", createTime=" + createTime +
-                ", commentCount=" + commentCount +
-                ", score=" + score +
-                '}';
-    }
 }
