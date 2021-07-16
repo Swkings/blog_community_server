@@ -2,7 +2,7 @@
 server:
   port: 8080
   servlet:
-    context-path: /
+    context-path: /api
 
 # logger logback-spring.xml中配置了
 #logging:
@@ -40,9 +40,14 @@ spring:
             enable: true
 
 # MybatisProperties
-mybatis:
+mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.swking.entity
   configuration:
     use-generated-keys: true
     map-underscore-to-camel-case: true
+
+# 自定义参数
+blogCommunity:
+  path:
+    domain: http://localhost:8080

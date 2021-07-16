@@ -1,9 +1,12 @@
 package com.swking;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swking.dao.DiscussPostMapper;
 import com.swking.dao.UserMapper;
 import com.swking.entity.DiscussPost;
 import com.swking.entity.User;
+import com.swking.service.IUserService;
+import com.swking.service.impl.UserServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,10 @@ public class MapperTest {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private IUserService userService;
+
 
     @Autowired
     private DiscussPostMapper discussPostMapper;
@@ -82,5 +89,21 @@ public class MapperTest {
 
         int rows = discussPostMapper.selectDiscussPostRows(149);
         System.out.println(rows);
+    }
+
+    @Test
+    public void testSelectUser_Mybatis_plus(){
+        // 条件封装
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("id",101);
+        List<User> us = userMapper.selectList(wrapper);
+        // [Customer(id=26, customerName=大牛哥, gender=男, telephone=66566, registerTime=null)]
+        System.out.println(us);
+    }
+
+    @Test
+    public void testSelectUser_Mybatis_plus_service(){
+        User user = userService.getById(101);
+        System.out.println(user);
     }
 }

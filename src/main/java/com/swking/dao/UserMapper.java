@@ -1,5 +1,6 @@
 package com.swking.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.swking.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,8 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
  **/
 
 @Mapper
-public interface UserMapper {
-    User selectById(int id);
+public interface UserMapper extends BaseMapper<User> {
+//    User selectById(int id);
     User selectByName(String username);
     User selectByEmail(String email);
     int insertUser(User user);

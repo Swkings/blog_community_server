@@ -1,5 +1,6 @@
 package com.swking;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -16,18 +17,20 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @Desc :
  **/
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = BlogCommunityServerApplication.class)
 public class LoggerTest {
-    private static final Logger logger = LoggerFactory.getLogger(LoggerTest.class);
+//    使用@Slf4j后，会自动生成该静态实例
+//    private static final Logger logger = LoggerFactory.getLogger(LoggerTest.class);
 
     @Test
     public void testLogger() {
-        System.out.println(logger.getName());
-        logger.debug("debug log");
-        logger.info("info log");
-        logger.warn("warn log");
-        logger.error("error log");
+        System.out.println(log.getName());
+        log.debug("debug log");
+        log.info("info log");
+        log.warn("warn log");
+        log.error("error log");
     }
 }

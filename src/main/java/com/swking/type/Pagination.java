@@ -1,4 +1,7 @@
-package com.swking.entity;
+package com.swking.type;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @Author: Swking
@@ -7,14 +10,18 @@ package com.swking.entity;
  * @File : Pagination
  * @Desc : 分页
  **/
+
+@ApiModel("分页信息")
 public class Pagination {
-    // 当前页码
+    @ApiModelProperty(value = "当前页码")
     private int current = 1;
-    // 显示上限
+    @ApiModelProperty(value = "显示上限")
     private int limit = 10;
     // 数据总数(用于计算总页数)
+    @ApiModelProperty(value = "总行数")
     private int rows;
     // 查询路径(用于复用分页链接)
+    @ApiModelProperty(value = "查询路径(用于复用分页链接)")
     private String path;
 
     public int getCurrent() {

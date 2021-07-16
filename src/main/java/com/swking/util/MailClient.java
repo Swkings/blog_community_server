@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
  * @email : 1114006175@qq.com
  * @Date : 2021/07/11
  * @File : MailClient
- * @Desc :
+ * @Desc : 邮件客户端
  **/
 
 @Component

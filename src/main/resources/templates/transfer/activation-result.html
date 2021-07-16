@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="http://swking.cn/images/avatar.png"/>
+    <title>Blog Community-激活账号</title>
+    <style>
+        .container{
+
+            width: 500px;
+        }
+        .textBody{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .msgBody{
+            text-indent: 8%;
+            margin-top: 5%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="textBody">
+        <div class="titleBody">
+            <b th:text="${email}">xxx@xxx.com</b>, 您好!
+        </div>
+        <div class="msgBody">
+            您的账号已激活, 2s后将自动跳转至
+            <a th:href="${url}" id="link"><i><b>登录页</b></i></a>,
+            您也可点击<a th:href="${url}"><i><b>链接</b></i></a>跳转!
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script language="javascript" type="text/javascript">
+    let goLogin = function(){
+        setTimeout(function(){
+            window.location.href=document.getElementById('link').val();
+        }, 2000);
+    };
+    goLogin();
+</script>
+</html>
