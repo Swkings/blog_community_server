@@ -5,8 +5,7 @@ import com.swking.dao.DiscussPostMapper;
 import com.swking.dao.UserMapper;
 import com.swking.entity.DiscussPost;
 import com.swking.entity.User;
-import com.swking.service.IUserService;
-import com.swking.service.impl.UserServiceImpl;
+import com.swking.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class MapperTest {
     private UserMapper userMapper;
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
 
     @Autowired
@@ -103,7 +102,7 @@ public class MapperTest {
 
     @Test
     public void testSelectUser_Mybatis_plus_service(){
-        User user = userService.getById(101);
+        User user = userService.findUserById(101);
         System.out.println(user);
     }
 }

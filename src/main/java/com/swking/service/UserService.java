@@ -1,14 +1,12 @@
-package com.swking.service.impl;
+package com.swking.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.swking.dao.LoginTicketMapper;
-import com.swking.service.IUserService;
-import com.swking.type.ResultCodeEnum;
-import com.swking.util.GlobalConstant;
 import com.swking.dao.UserMapper;
 import com.swking.entity.LoginTicket;
 import com.swking.entity.User;
+import com.swking.type.ResultCodeEnum;
 import com.swking.util.BlogCommunityUtil;
+import com.swking.util.GlobalConstant;
 import com.swking.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +22,12 @@ import java.util.Map;
 /**
  * @Author: Swking
  * @email : 1114006175@qq.com
- * @Date : 2021/07/11
+ * @Date : 2021/07/19
  * @File : UserService
  * @Desc :
  **/
-
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService, GlobalConstant{
+public class UserService implements GlobalConstant {
     @Autowired
     private UserMapper userMapper;
 
@@ -51,6 +48,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     public User findUserById(int id){
         return userMapper.selectById(id);
+    }
+
+    public User findUserByName(String username){
+        return userMapper.selectByName(username);
     }
 
     public Map<String, Object> register(User user) {

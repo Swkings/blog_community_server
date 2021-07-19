@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <contextName>blog_community</contextName>
-    <property name="LOG_PATH" value="C:/CodeSpace/JavaSpace/blog_community_server/log"/>
+    <property name="LOG_PATH" value="C:/CodeSpace/JavaSpace/blog_community_server/ext/log"/>
     <property name="APPDIR" value="blog_community"/>
 
     <!-- error file -->

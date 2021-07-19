@@ -27,8 +27,11 @@
         <div class="titleBody">
             <b th:text="${email}">xxx@xxx.com</b>, 您好!
         </div>
-        <div class="msgBody">
-            您的账号已激活, 2s后将自动跳转至
+        <div class="msgBody" th:if="${resData.success}">
+            <b th:utext="${resData.message}"></b>
+            <b>，</b>
+            <i id="sec"> 2 </i>s后将自动跳转至
+<!--            <a href="http://localhost:3001/login" id="link"><i><b>登录页</b></i></a>,-->
             <a th:href="${url}" id="link"><i><b>登录页</b></i></a>,
             您也可点击<a th:href="${url}"><i><b>链接</b></i></a>跳转!
         </div>
@@ -38,11 +41,16 @@
 </body>
 
 <script language="javascript" type="text/javascript">
-    let goLogin = function(){
-        setTimeout(function(){
-            window.location.href=document.getElementById('link').val();
-        }, 2000);
-    };
-    goLogin();
+    let secElement = document.getElementById("sec");
+    function countDown(secs){
+        secElement.innerText = secs;
+        if (secs==0) {
+            window.location.href=document.getElementById('link').href;
+        }
+        if(--secs>=0){
+            setTimeout("countDown("+secs+")",1000);
+        }
+    }
+    countDown(3)
 </script>
 </html>

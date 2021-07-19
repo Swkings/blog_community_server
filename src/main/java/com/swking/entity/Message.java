@@ -23,7 +23,7 @@ import java.util.Date;
 public class Message {
     @ApiModelProperty(value = "用户id")
     @TableId(value = "id", type = IdType.AUTO)
-    private int id;
+    private Integer id;
     @ApiModelProperty(value = "发消息用户ID")
     private int fromId;
     @ApiModelProperty(value = "收消息用户ID")

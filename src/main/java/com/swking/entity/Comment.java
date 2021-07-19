@@ -23,7 +23,7 @@ import java.util.Date;
 public class Comment {
     @ApiModelProperty(value = "帖子id")
     @TableId(value = "id", type = IdType.AUTO)//指定自增策略
-    private int id;
+    private Integer id;
     @ApiModelProperty(value = "用户ID")
     private int userId;
     @ApiModelProperty(value = "评论类型 => 1: 对帖子评论; 2: 对评论评论")

@@ -1,10 +1,10 @@
 package com.swking.controller;
 
+import com.swking.service.UserService;
 import com.swking.type.ResultCodeEnum;
 import com.swking.util.GlobalConstant;
 import com.swking.type.ReturnData;
 import com.swking.entity.User;
-import com.swking.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class RegisterController implements GlobalConstant {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @PostMapping(path = "/register")
     @ApiOperation("注册")

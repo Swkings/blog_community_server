@@ -3,8 +3,6 @@ package com.swking.type;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @Author: Swking
@@ -14,8 +12,7 @@ import lombok.ToString;
  * @Desc :
  **/
 
-@Setter
-@ToString
+@Data
 @ApiModel(value = "LoginFormData")
 public class LoginFormData{
     @ApiModelProperty(value = "用户名")
@@ -28,24 +25,4 @@ public class LoginFormData{
     private boolean remember;
     @ApiModelProperty(value = "验证码URL")
     private String captchaUrl;
-
-    public String getUserName() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCaptchaCode() {
-        return captchaCode;
-    }
-
-    public boolean getRemember() {
-        return remember;
-    }
-
-    public String getCaptchaUrl() {
-        return captchaUrl;
-    }
 }

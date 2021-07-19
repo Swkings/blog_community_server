@@ -50,12 +50,11 @@ public class ReturnData{
 
     public static ReturnData error(){
         ReturnData returnData = new ReturnData();
-        returnData.setCode(ResultCodeEnum.UNKNOWN_REASON.getCode());
-        returnData.setSuccess(ResultCodeEnum.UNKNOWN_REASON.getStatus());
-        returnData.setMessage(ResultCodeEnum.UNKNOWN_REASON.getMessage());
+        returnData.setCode(ResultCodeEnum.ERROR.getCode());
+        returnData.setSuccess(ResultCodeEnum.ERROR.getStatus());
+        returnData.setMessage(ResultCodeEnum.ERROR.getMessage());
         return returnData;
     }
-
     public static ReturnData success(ResultCodeEnum codeEnum){
         ReturnData returnData = new ReturnData();
         returnData.setCode(codeEnum.getCode());

@@ -1,26 +1,21 @@
 package com.swking.controller;
 
 import com.google.code.kaptcha.Producer;
-import com.swking.service.IUserService;
+import com.swking.service.UserService;
 import com.swking.type.ResultCodeEnum;
 import com.swking.util.GlobalConstant;
 import com.swking.type.LoginFormData;
 import com.swking.type.ReturnData;
 import com.swking.util.BlogCommunityUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
@@ -36,18 +31,21 @@ import java.util.Map;
  * @Desc :
  **/
 
-@Controller
+@RestController
 @Api(tags = "Login API")
 public class LoginController implements GlobalConstant {
 
     @Autowired
-    private IUserService userService;
+    private UserService userService;
 
     @Autowired
     private Producer captchaProducer;
 
     @Value("${server.servlet.context-path}")
     private String contextPath;
+
+    @Value("${client.domain}")
+    private String clientDomain;
 
     @PostMapping(path = "/login")
     @ApiOperation(value = "登录", response = ReturnData.class)
@@ -68,8 +66,8 @@ public class LoginController implements GlobalConstant {
         }
 
         // 检查账号,密码
-        int expiredSeconds = loginForm.getRemember() ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
-        Map<String, Object> infoMap = userService.login(loginForm.getUserName(), loginForm.getPassword(), expiredSeconds);
+        int expiredSeconds = loginForm.isRemember() ? REMEMBER_EXPIRED_SECONDS : DEFAULT_EXPIRED_SECONDS;
+        Map<String, Object> infoMap = userService.login(loginForm.getUsername(), loginForm.getPassword(), expiredSeconds);
         if (infoMap.containsKey("ticket")) {
             Cookie cookie = new Cookie("ticket", infoMap.get("ticket").toString());
             cookie.setPath(contextPath);
@@ -95,6 +93,9 @@ public class LoginController implements GlobalConstant {
     @GetMapping(path = "/captcha")
     @ApiOperation("验证码")
     public void getCaptcha(HttpServletResponse response, HttpSession session) {
+        /**
+         * 在response中返回的类型是image，所以不用统一返回类型
+         * */
         // 生成验证码
         String text = captchaProducer.createText();
         BufferedImage image = captchaProducer.createImage(text);
@@ -118,34 +119,38 @@ public class LoginController implements GlobalConstant {
         try {
             OutputStream os = response.getOutputStream();
             ImageIO.write(image, "png", os);
+//            return ReturnData.success(ResultCodeEnum.SUCCESS);
         } catch (IOException e) {
             System.out.println("响应验证码失败:" + e.getMessage());
+//            return ReturnData.success(ResultCodeEnum.UNKNOWN_REASON);
         }
     }
 
-    // http://localhost:8080/community/activation/101/code
-    @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
-    @ApiOperation(value = "激活账号", httpMethod = "GET")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "path", required = true),
-            @ApiImplicitParam(name = "code", value = "激活码", paramType = "path", required = true)
-    })
-    public String activation(
-            Model model,
-            @PathVariable("userId") int userId,
-            @PathVariable("code") String code,
-            HttpServletRequest request, HttpServletResponse response) {
-        ReturnData resData;
-        int result = userService.activation(userId, code);
-        if (result == ACTIVATION_SUCCESS) {
-            resData = ReturnData.success().message("激活成功,您的账号已经可以正常使用了!");
-        } else if (result == ACTIVATION_REPEAT) {
-            resData = ReturnData.error(ResultCodeEnum.ERROR_REPEAT_ACTIVATE_USER);
-        } else {
-            resData = ReturnData.error(ResultCodeEnum.ERROR_ACTIVATE_CODE);
-        }
-        model.addAttribute("url", "http://locolhost:3001/login");
-        model.addAttribute("resData", resData);
-        return "/transfer/activation-result";
-    }
+//    // http://localhost:8080/api/activation/101/code
+//    @GetMapping(path = "/activation/{userId}/{code}")
+//    @ApiOperation(value = "激活账号")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "userId", value = "用户ID", paramType = "path", required = true),
+//            @ApiImplicitParam(name = "code", value = "激活码", paramType = "path", required = true)
+//    })
+//    public void activation(
+//            @PathVariable("userId") int userId,
+//            @PathVariable("code") String code,
+//            HttpServletRequest request,
+//            HttpServletResponse response,
+//            RedirectAttributes attributes) throws IOException {
+//        ReturnData resData;
+//        int result = userService.activation(userId, code);
+//        if (result == ACTIVATION_SUCCESS) {
+//            resData = ReturnData.success().message("激活成功,您的账号已经可以正常使用了!");
+//        } else if (result == ACTIVATION_REPEAT) {
+//            resData = ReturnData.error(ResultCodeEnum.ERROR_REPEAT_ACTIVATE_USER);
+//        } else {
+//            resData = ReturnData.error(ResultCodeEnum.ERROR_ACTIVATE_CODE);
+//        }
+//        attributes.addAttribute("ReturnData", resData);
+//        response.sendRedirect(clientDomain+"/login");
+////        return "/transfer/activation-result";
+//    }
+
 }

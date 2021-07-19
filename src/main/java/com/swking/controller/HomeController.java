@@ -1,20 +1,24 @@
 package com.swking.controller;
 
+import com.swking.service.DiscussPostService;
+import com.swking.service.UserService;
 import com.swking.type.ResultCodeEnum;
 import com.swking.util.GlobalConstant;
 import com.swking.entity.DiscussPost;
 import com.swking.type.Pagination;
 import com.swking.type.ReturnData;
 import com.swking.entity.User;
-import com.swking.service.impl.DiscussPostServiceImpl;
-import com.swking.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,12 +36,15 @@ import java.util.Map;
 @Api(tags = "Home API")
 public class HomeController implements GlobalConstant {
     @Autowired
-    private DiscussPostServiceImpl discussPostService;
+    private DiscussPostService discussPostService;
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
-    @RequestMapping(path = "/")
+    @Value("${client.domain}")
+    private String clientDomain;
+
+    @GetMapping(path = "/")
     @ApiOperation("默认页")
     public ReturnData defaultPage(Pagination page){
         return getIndexPage(page);
@@ -64,5 +71,11 @@ public class HomeController implements GlobalConstant {
         data.put("pagination", page);
         data.put("postUserList", postUserList);
         return ReturnData.success(ResultCodeEnum.SUCCESS).data(data);
+    }
+
+    @GetMapping(path = "/error")
+    @ApiOperation("错误页")
+    public void getErrorPage(HttpServletResponse response) throws IOException {
+        response.sendRedirect(clientDomain+"/error");
     }
 }
