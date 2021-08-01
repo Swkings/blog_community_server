@@ -21,6 +21,7 @@ public class HelloController {
     @GetMapping(value = "/hello")
     @ApiOperation("Hello接口")
     public String hello(){
+        int a = 2/0;
         return "hello";
     }
 }

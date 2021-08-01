@@ -72,10 +72,4 @@ public class HomeController implements GlobalConstant {
         data.put("postUserList", postUserList);
         return ReturnData.success(ResultCodeEnum.SUCCESS).data(data);
     }
-
-    @GetMapping(path = "/error")
-    @ApiOperation("错误页")
-    public void getErrorPage(HttpServletResponse response) throws IOException {
-        response.sendRedirect(clientDomain+"/error");
-    }
 }
