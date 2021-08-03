@@ -1,6 +1,7 @@
 package com.swking.controller;
 
 import com.swking.service.DiscussPostService;
+import com.swking.service.LikeService;
 import com.swking.service.UserService;
 import com.swking.type.ResultCodeEnum;
 import com.swking.util.GlobalConstant;
@@ -41,6 +42,9 @@ public class HomeController implements GlobalConstant {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private LikeService likeService;
+
     @Value("${client.domain}")
     private String clientDomain;
 
@@ -64,6 +68,10 @@ public class HomeController implements GlobalConstant {
                 map.put("post", post);
                 User user = userService.findUserById(post.getUserId());
                 map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+                map.put("likeCount", likeCount);
+
                 postUserList.add(map);
             }
         }

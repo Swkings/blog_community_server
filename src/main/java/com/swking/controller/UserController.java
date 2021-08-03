@@ -2,6 +2,7 @@ package com.swking.controller;
 
 import com.swking.annotation.LoginRequired;
 import com.swking.entity.User;
+import com.swking.service.LikeService;
 import com.swking.service.UserService;
 import com.swking.type.ReturnData;
 import com.swking.util.BlogCommunityUtil;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Swking
@@ -48,6 +51,9 @@ public class UserController {
 
     @Autowired
     private UserHolder userHolder;
+
+    @Autowired
+    private LikeService likeService;
 
     @LoginRequired
     @GetMapping(path = "/test")
@@ -115,19 +121,20 @@ public class UserController {
     }
 
     // 个人主页
-//    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
-//    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
-//        User user = userService.findUserById(userId);
-//        if (user == null) {
-//            throw new RuntimeException("该用户不存在!");
-//        }
-//
-//        // 用户
-//        model.addAttribute("user", user);
-//        // 点赞数量
-//        int likeCount = likeService.findUserLikeCount(userId);
-//        model.addAttribute("likeCount", likeCount);
-//
+    @GetMapping(path = "/profile/{userId}")
+    @ApiOperation("个人主页")
+    public ReturnData getProfilePage(@PathVariable("userId") int userId) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+        Map<String, Object> data = new HashMap<>();
+        // 用户
+        data.put("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        data.put("likeCount", likeCount);
+
 //        // 关注数量
 //        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
 //        model.addAttribute("followeeCount", followeeCount);
@@ -140,7 +147,7 @@ public class UserController {
 //            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
 //        }
 //        model.addAttribute("hasFollowed", hasFollowed);
-//
-//        return "/site/profile";
-//    }
+
+        return ReturnData.success().data(data);
+    }
 }
