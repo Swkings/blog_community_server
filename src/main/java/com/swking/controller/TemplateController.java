@@ -33,7 +33,7 @@ public class TemplateController implements GlobalConstant {
     @Autowired
     private UserService userService;
 
-    @Value("${client.domain}")
+    @Value("${blogCommunity.client.domain}")
     private String clientDomain;
 
     // http://localhost:8080/api/activation/101/code

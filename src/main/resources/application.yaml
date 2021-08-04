@@ -58,5 +58,6 @@ blogCommunity:
   path:
     domain: http://localhost:8080
     upload: C:/CodeSpace/JavaSpace/blog_community_server/ext/upload
-client:
-  domain: http://localhost:3001
+  client:
+    domain: http://localhost:3001
+  enable-redis: true

@@ -42,7 +42,7 @@ public class RedisKeyUtil {
     }
 
     // 登录验证码
-    public static String getKaptchaKey(String owner) {
+    public static String getCaptchaKey(String owner) {
         return PREFIX_CAPTCHA + SPLIT + owner;
     }
 

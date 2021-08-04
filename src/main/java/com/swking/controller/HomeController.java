@@ -45,7 +45,7 @@ public class HomeController implements GlobalConstant {
     @Autowired
     private LikeService likeService;
 
-    @Value("${client.domain}")
+    @Value("${blogCommunity.client.domain}")
     private String clientDomain;
 
     @GetMapping(path = "/")

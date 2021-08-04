@@ -245,7 +245,7 @@ public class MessageController implements GlobalConstant {
 
     @GetMapping(path = "/notice/detail/{topic}")
     @ApiOperation("通知详情")
-    public ReturnData getNoticeDetail(@PathVariable("topic") String topic, Pagination page, Model model) {
+    public ReturnData getNoticeDetail(@PathVariable("topic") String topic, Pagination page) {
         Map<String, Object> data = new HashMap<>();
         User user = userHolder.getUser();
 
@@ -280,7 +280,7 @@ public class MessageController implements GlobalConstant {
         if (!ids.isEmpty()) {
             messageService.readMessage(ids);
         }
-        data.put("page", page);
+        data.put("pagination", page);
 
         return ReturnData.success().data(data);
     }

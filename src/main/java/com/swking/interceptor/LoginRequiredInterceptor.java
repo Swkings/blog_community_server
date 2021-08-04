@@ -27,7 +27,7 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
     @Autowired
     private UserHolder userHolder;
 
-    @Value("${client.domain}")
+    @Value("${blogCommunity.client.domain}")
     private String clientDomain;
 
     @Override

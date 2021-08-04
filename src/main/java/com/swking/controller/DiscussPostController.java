@@ -94,6 +94,8 @@ public class DiscussPostController implements GlobalConstant {
         data.put("likeStatus", likeStatus);
 
         // 评论分页信息
+        // 分页信息会自动注入, 如果地址中带参数的话
+        // 如果
         page.setLimit(5);
         page.setPath("/discuss/detail/" + discussPostId);
         page.setRows(post.getCommentCount());
@@ -158,7 +160,7 @@ public class DiscussPostController implements GlobalConstant {
         }
 
         data.put("comments", commentVoList);
-        data.put("page", page);
+        data.put("pagination", page);
         return ReturnData.success(ResultCodeEnum.SUCCESS).data(data);
     }
 }
