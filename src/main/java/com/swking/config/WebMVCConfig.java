@@ -2,6 +2,7 @@ package com.swking.config;
 
 import com.swking.interceptor.LoginRequiredInterceptor;
 import com.swking.interceptor.LoginTicketInterceptor;
+import com.swking.interceptor.MessageInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,6 +59,9 @@ public class WebMVCConfig implements WebMvcConfigurer{
     @Autowired
     private LoginRequiredInterceptor loginRequiredInterceptor;
 
+    @Autowired
+    private MessageInterceptor messageInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginTicketInterceptor)
@@ -66,5 +70,8 @@ public class WebMVCConfig implements WebMvcConfigurer{
 
         registry.addInterceptor(loginRequiredInterceptor)
                 .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");
+
+        registry.addInterceptor(messageInterceptor)
+                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
     }
 }

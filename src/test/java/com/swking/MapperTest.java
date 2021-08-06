@@ -6,6 +6,7 @@ import com.swking.dao.UserMapper;
 import com.swking.entity.DiscussPost;
 import com.swking.entity.User;
 import com.swking.service.UserService;
+import com.swking.util.BlogCommunityUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,16 @@ public class MapperTest {
         rows = userMapper.updatePassword(150, "swk");
         System.out.println(rows);
     }
+
+    @Test
+    public void testModifyPassword() {
+        String pass = "123456";
+        User user = userMapper.selectById(111);
+        String password = BlogCommunityUtil.GetMD5(pass + user.getSalt());
+        int rows = userMapper.updatePassword(user.getId(), password);
+        System.out.println(rows);
+    }
+
 
     @Test
     public void testSelectPosts() {

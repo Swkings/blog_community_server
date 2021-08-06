@@ -2,10 +2,12 @@ package com.swking.controller;
 
 import com.swking.annotation.LoginRequired;
 import com.swking.entity.User;
+import com.swking.service.FollowService;
 import com.swking.service.LikeService;
 import com.swking.service.UserService;
 import com.swking.type.ReturnData;
 import com.swking.util.BlogCommunityUtil;
+import com.swking.util.GlobalConstant;
 import com.swking.util.UserHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +37,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "User API")
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements GlobalConstant {
 
     @Value("${blogCommunity.path.upload}")
     private String uploadPath;
@@ -54,6 +56,9 @@ public class UserController {
 
     @Autowired
     private LikeService likeService;
+
+    @Autowired
+    private FollowService followService;
 
     @LoginRequired
     @GetMapping(path = "/test")
@@ -135,18 +140,18 @@ public class UserController {
         int likeCount = likeService.findUserLikeCount(userId);
         data.put("likeCount", likeCount);
 
-//        // 关注数量
-//        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
-//        model.addAttribute("followeeCount", followeeCount);
-//        // 粉丝数量
-//        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
-//        model.addAttribute("followerCount", followerCount);
-//        // 是否已关注
-//        boolean hasFollowed = false;
-//        if (hostHolder.getUser() != null) {
-//            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
-//        }
-//        model.addAttribute("hasFollowed", hasFollowed);
+       // 关注数量
+       long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        data.put("followeeCount", followeeCount);
+       // 粉丝数量
+       long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+       data.put("followerCount", followerCount);
+       // 是否已关注
+       boolean hasFollowed = false;
+       if (userHolder.getUser() != null) {
+           hasFollowed = followService.hasFollowed(userHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+       }
+        data.put("hasFollowed", hasFollowed);
 
         return ReturnData.success().data(data);
     }

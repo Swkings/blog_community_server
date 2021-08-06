@@ -8,13 +8,11 @@ import com.swking.service.UserService;
 import com.swking.type.Pagination;
 import com.swking.type.ResultCodeEnum;
 import com.swking.type.ReturnData;
-import com.swking.util.BlogCommunityUtil;
 import com.swking.util.GlobalConstant;
 import com.swking.util.UserHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
@@ -178,7 +176,7 @@ public class MessageController implements GlobalConstant {
             String content = HtmlUtils.htmlUnescape(message.getContent());
             Map<String, Object> contentMap = JSONObject.parseObject(content, HashMap.class);
 
-            messageVO.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVO.put("user", userService.findUserById((Integer) contentMap.get("userId")));
             messageVO.put("entityType", contentMap.get("entityType"));
             messageVO.put("entityId", contentMap.get("entityId"));
             messageVO.put("postId", contentMap.get("postId"));
@@ -200,7 +198,7 @@ public class MessageController implements GlobalConstant {
             String content = HtmlUtils.htmlUnescape(message.getContent());
             Map<String, Object> contentMap = JSONObject.parseObject(content, HashMap.class);
 
-            messageVO.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVO.put("user", userService.findUserById((Integer) contentMap.get("userId")));
             messageVO.put("entityType", contentMap.get("entityType"));
             messageVO.put("entityId", contentMap.get("entityId"));
             messageVO.put("postId", contentMap.get("postId"));
@@ -222,7 +220,7 @@ public class MessageController implements GlobalConstant {
             String content = HtmlUtils.htmlUnescape(message.getContent());
             Map<String, Object> contentMap = JSONObject.parseObject(content, HashMap.class);
 
-            messageVO.put("user", userService.findUserById((Integer) data.get("userId")));
+            messageVO.put("user", userService.findUserById((Integer) contentMap.get("userId")));
             messageVO.put("entityType", contentMap.get("entityType"));
             messageVO.put("entityId", contentMap.get("entityId"));
 
@@ -263,7 +261,7 @@ public class MessageController implements GlobalConstant {
                 // 内容
                 String content = HtmlUtils.htmlUnescape(notice.getContent());
                 Map<String, Object> contentMap = JSONObject.parseObject(content, HashMap.class);
-                map.put("user", userService.findUserById((Integer) data.get("userId")));
+                map.put("user", userService.findUserById((Integer) contentMap.get("userId")));
                 map.put("entityType", contentMap.get("entityType"));
                 map.put("entityId", contentMap.get("entityId"));
                 map.put("postId", contentMap.get("postId"));

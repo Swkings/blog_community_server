@@ -1,7 +1,9 @@
 package com.swking.controller;
 
 
+import com.swking.entity.Event;
 import com.swking.entity.User;
+import com.swking.event.EventProducer;
 import com.swking.service.FollowService;
 import com.swking.service.UserService;
 import com.swking.type.Pagination;
@@ -41,8 +43,8 @@ public class FollowController implements GlobalConstant {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private EventProducer eventProducer;
+   @Autowired
+   private EventProducer eventProducer;
 
     @PostMapping(path = "/follow")
     @ApiOperation("关注")
@@ -51,14 +53,14 @@ public class FollowController implements GlobalConstant {
 
         followService.follow(user.getId(), entityType, entityId);
 
-//        // 触发关注事件
-//        Event event = new Event()
-//                .setTopic(TOPIC_FOLLOW)
-//                .setUserId(hostHolder.getUser().getId())
-//                .setEntityType(entityType)
-//                .setEntityId(entityId)
-//                .setEntityUserId(entityId);
-//        eventProducer.fireEvent(event);
+       // 触发关注事件
+       Event event = new Event()
+               .setTopic(TOPIC_FOLLOW)
+               .setUserId(userHolder.getUser().getId())
+               .setEntityType(entityType)
+               .setEntityId(entityId)
+               .setEntityUserId(entityId);
+       eventProducer.fireEvent(event);
         return ReturnData.success().message("已关注");
     }
 
