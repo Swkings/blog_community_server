@@ -24,7 +24,7 @@ import java.util.Date;
 @Data
 @ApiModel(value = "帖子信息")
 @TableName(value = "discuss_post")
-@Document(indexName = "discusspost", shards = 6, replicas = 3)
+@Document(indexName = "discusspost", type = "_doc",shards = 6, replicas = 3)
 public class DiscussPost {
     @Id
     @ApiModelProperty(value = "帖子id")

@@ -5,14 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.2</version>
+        <version>2.1.5.RELEASE</version>
+<!--        <version>2.5.2</version>-->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.swking</groupId>
     <artifactId>blog_community_server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>blog_community_server</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Blog Community project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -148,6 +149,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+
     </dependencies>
 
 
