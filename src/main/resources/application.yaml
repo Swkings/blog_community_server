@@ -8,7 +8,7 @@ server:
 #logging:
 #  level.com.swking: debug
 #  file:
-#    path: C:\CodeSpace\JavaSpace\blog_community_server\log
+#    path: E:\CodeSpace\JavaSpace\blog_community_server\log
 #    name: blog_community.log
 
 spring:
@@ -73,7 +73,7 @@ mybatis-plus:
 blogCommunity:
   path:
     domain: http://localhost:8080
-    upload: C:/CodeSpace/JavaSpace/blog_community_server/ext/upload
+    upload: E:/CodeSpace/JavaSpace/blog_community_server/ext/upload
   client:
     domain: http://localhost:3001
   enable-redis: true

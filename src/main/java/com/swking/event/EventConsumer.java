@@ -5,6 +5,7 @@ import com.swking.entity.DiscussPost;
 import com.swking.entity.Event;
 import com.swking.entity.Message;
 import com.swking.service.DiscussPostService;
+import com.swking.service.ElasticsearchService;
 import com.swking.service.MessageService;
 import com.swking.util.GlobalConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +36,8 @@ public class EventConsumer implements GlobalConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
-    // @Autowired
-    // private ElasticsearchService elasticsearchService;
+    @Autowired
+    private ElasticsearchService elasticsearchService;
 
     @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
     public void handleCommentMessage(ConsumerRecord record) {
@@ -88,7 +89,7 @@ public class EventConsumer implements GlobalConstant {
         }
 
         DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
-        // elasticsearchService.saveDiscussPost(post);
+        elasticsearchService.saveDiscussPost(post);
     }
 
 }

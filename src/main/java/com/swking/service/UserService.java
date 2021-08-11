@@ -189,6 +189,7 @@ public class UserService implements GlobalConstant {
         }
 
         map.put("ticket", loginTicket.getTicket());
+        map.put("user", user);
         return map;
     }
 

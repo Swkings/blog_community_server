@@ -2,7 +2,9 @@ package com.swking.controller;
 
 import com.swking.entity.Comment;
 import com.swking.entity.DiscussPost;
+import com.swking.entity.Event;
 import com.swking.entity.User;
+import com.swking.event.EventProducer;
 import com.swking.service.CommentService;
 import com.swking.service.DiscussPostService;
 import com.swking.service.LikeService;
@@ -31,8 +33,8 @@ import java.util.*;
  **/
 
 @RestController
-@Api(tags = "Discuss API")
-@RequestMapping("/discuss")
+@Api(tags = "Community API")
+@RequestMapping("/community")
 public class DiscussPostController implements GlobalConstant {
     @Autowired
     private DiscussPostService discussPostService;
@@ -49,6 +51,37 @@ public class DiscussPostController implements GlobalConstant {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
+
+    @GetMapping(path = "/")
+    @ApiOperation("community默认页")
+    public ReturnData getCommunity(Pagination page){
+        page.setRows(discussPostService.findDiscussPostRows(0));
+        page.setPath("/community");
+
+        List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        List<Map<String, Object>> postUserList = new ArrayList<>();
+        if (list != null) {
+            for (DiscussPost post : list) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("post", post);
+                User user = userService.findUserById(post.getUserId());
+                map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+                map.put("likeCount", likeCount);
+
+                postUserList.add(map);
+            }
+        }
+        Map<String, Object> data = new HashMap<>();
+        data.put("pagination", page);
+        data.put("postUserList", postUserList);
+        return ReturnData.success(ResultCodeEnum.SUCCESS).data(data);
+    }
+
     @PostMapping(path = "/add")
     @ApiOperation(value = "发布帖子")
     public ReturnData addDiscussPost(@RequestBody DiscussPost post) {
@@ -63,13 +96,13 @@ public class DiscussPostController implements GlobalConstant {
 
         discussPostService.addDiscussPost(post);
 
-//        // 触发发帖事件
-//        Event event = new Event()
-//                .setTopic(TOPIC_PUBLISH)
-//                .setUserId(user.getId())
-//                .setEntityType(ENTITY_TYPE_POST)
-//                .setEntityId(post.getId());
-//        eventProducer.fireEvent(event);
+       // 触发发帖事件
+       Event event = new Event()
+               .setTopic(TOPIC_PUBLISH)
+               .setUserId(user.getId())
+               .setEntityType(ENTITY_TYPE_POST)
+               .setEntityId(post.getId());
+       eventProducer.fireEvent(event);
 
         // 报错的情况,将来统一处理.
         return ReturnData.error(ResultCodeEnum.SUCCESS).message("发布成功！");
@@ -97,7 +130,7 @@ public class DiscussPostController implements GlobalConstant {
         // 分页信息会自动注入, 如果地址中带参数的话
         // 如果
         page.setLimit(5);
-        page.setPath("/discuss/detail/" + discussPostId);
+        page.setPath("/community/detail/" + discussPostId);
         page.setRows(post.getCommentCount());
 
         // 评论: 给帖子的评论

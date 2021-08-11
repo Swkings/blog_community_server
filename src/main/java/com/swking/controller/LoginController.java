@@ -90,7 +90,7 @@ public class LoginController implements GlobalConstant {
             cookie.setPath(contextPath);
             cookie.setMaxAge(expiredSeconds);
             response.addCookie(cookie);
-            return ReturnData.success(ResultCodeEnum.SUCCESS_LOGIN);
+            return ReturnData.success(ResultCodeEnum.SUCCESS_LOGIN).data("user", infoMap.get("user"));
         } else {
             if (infoMap.containsKey("error")){
                 return ReturnData.error((ResultCodeEnum) infoMap.get("error"));
