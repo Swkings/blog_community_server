@@ -1,5 +1,6 @@
 package com.swking.config;
 
+import com.swking.interceptor.DataInterceptor;
 import com.swking.interceptor.LoginRequiredInterceptor;
 import com.swking.interceptor.LoginTicketInterceptor;
 import com.swking.interceptor.MessageInterceptor;
@@ -56,11 +57,15 @@ public class WebMVCConfig implements WebMvcConfigurer{
     @Autowired
     private LoginTicketInterceptor loginTicketInterceptor;
 
-    @Autowired
-    private LoginRequiredInterceptor loginRequiredInterceptor;
+    // 已经用security做权限控制了
+    // @Autowired
+    // private LoginRequiredInterceptor loginRequiredInterceptor;
 
     @Autowired
     private MessageInterceptor messageInterceptor;
+
+    @Autowired
+    private DataInterceptor dataInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -68,10 +73,13 @@ public class WebMVCConfig implements WebMvcConfigurer{
                 // 不拦截静态资源
                 .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");
 
-        registry.addInterceptor(loginRequiredInterceptor)
-                .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");
+        // registry.addInterceptor(loginRequiredInterceptor)
+        //         .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");
 
         registry.addInterceptor(messageInterceptor)
+                .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
+
+        registry.addInterceptor(dataInterceptor)
                 .excludePathPatterns("/**/*.css", "/**/*.js", "/**/*.png", "/**/*.jpg", "/**/*.jpeg");
     }
 }

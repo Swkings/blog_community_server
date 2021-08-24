@@ -1,6 +1,6 @@
 # ServerProperties
 server:
-  port: 8080
+  port: 4001
   servlet:
     context-path: /api
 
@@ -51,6 +51,9 @@ spring:
       group-id: swking-consumer-group
       enable-auto-commit: true
       auto-commit-interval: 3000
+      properties:
+        security:
+          protocol: PLAINTEXT
   # ElasticsearchProperties 7.x
   # elasticsearch:
   #   rest:
@@ -60,6 +63,10 @@ spring:
     elasticsearch:
       cluster-name: swking
       cluster-nodes: 127.0.0.1:9300
+  security:
+    user:
+      name: swking
+      password: root
 
 # MybatisProperties
 mybatis-plus:
@@ -74,6 +81,7 @@ blogCommunity:
   path:
     domain: http://localhost:8080
     upload: E:/CodeSpace/JavaSpace/blog_community_server/ext/upload
+    tsp-file: E:/CodeSpace/JavaSpace/blog_community_server/ext/tsp-solver
   client:
     domain: http://localhost:3001
   enable-redis: true

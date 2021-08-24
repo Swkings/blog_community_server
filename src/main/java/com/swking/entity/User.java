@@ -25,6 +25,7 @@ public class User {
     private Integer id;
     @ApiModelProperty(value = "用户名")
     private String username;
+
     @ApiModelProperty(value = "密码")
     private String password;
     @ApiModelProperty(value = "密码附加串")

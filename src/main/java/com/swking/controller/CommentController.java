@@ -6,6 +6,8 @@ import com.swking.entity.Event;
 import com.swking.event.EventProducer;
 import com.swking.service.CommentService;
 import com.swking.service.DiscussPostService;
+import com.swking.service.UserService;
+import com.swking.type.ResultCodeEnum;
 import com.swking.type.ReturnData;
 import com.swking.util.GlobalConstant;
 import com.swking.util.UserHolder;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Swking
@@ -40,14 +44,22 @@ public class CommentController implements GlobalConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping(path = "/add/{discussPostId}")
     @ApiOperation("添加帖子")
     public ReturnData addComment(@PathVariable("discussPostId") int discussPostId, @RequestBody Comment comment) {
+        System.out.println("discussPostId: "+discussPostId);
+        if(comment==null || discussPostId<0) {
+            return ReturnData.error().message("参数错误");
+        }
         comment.setUserId(userHolder.getUser().getId());
         comment.setStatus(0);
         comment.setCreateTime(new Date());
         commentService.addComment(comment);
-
+        System.out.println("comment: "+comment.toString());
+        Map<String, Object> reply = new HashMap<>();
        // 触发评论事件
        Event event = new Event()
                .setTopic(TOPIC_COMMENT)
@@ -61,6 +73,7 @@ public class CommentController implements GlobalConstant {
        } else if (comment.getEntityType() == ENTITY_TYPE_COMMENT) {
            Comment target = commentService.findCommentById(comment.getEntityId());
            event.setEntityUserId(target.getUserId());
+           reply.put("target", userService.findUserById(target.getUserId()));
        }
        eventProducer.fireEvent(event);
 
@@ -74,6 +87,11 @@ public class CommentController implements GlobalConstant {
            eventProducer.fireEvent(event);
        }
 
-        return ReturnData.success().data("discussPostId", discussPostId);
+        reply.put("likeCount", 0);
+        reply.put("likeStatus", 0);
+        reply.put("reply", comment);
+        reply.put("user", userHolder.getUser());
+
+        return ReturnData.success(ResultCodeEnum.SUCCESS_NO_MESSAGE).data(reply);
     }
 }

@@ -51,6 +51,10 @@ public class BlogCommunityUtil {
         return GetJSONString(code, null, null);
     }
 
+    public static String GetObjectString(Object obj) {
+        return JSONObject.toJSONString(obj);
+    }
+
     public static void main(String[] args) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Swking");

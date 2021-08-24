@@ -1,5 +1,7 @@
 package com.swking.advice;
 
+import com.swking.type.ResultCodeEnum;
+import com.swking.type.ReturnData;
 import com.swking.util.BlogCommunityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -29,12 +31,12 @@ public class ExceptionAdvice {
             log.error(element.toString());
         }
 
-//        如果是异步请求，则返回json，否则重定向至error
+       // 如果是异步请求，则返回json，否则重定向至error
         String xRequestedWith = request.getHeader("x-requested-with");
         if ("XMLHttpRequest".equals(xRequestedWith)) {
             response.setContentType("application/plain;charset=utf-8");
             PrintWriter writer = response.getWriter();
-            writer.write(BlogCommunityUtil.GetJSONString(1, "服务器异常!"));
+            writer.write(BlogCommunityUtil.GetObjectString(ReturnData.error(ResultCodeEnum.ERROR_SERVE_EXCEPTION)));
         } else {
             response.sendRedirect(request.getContextPath() + "/error");
         }

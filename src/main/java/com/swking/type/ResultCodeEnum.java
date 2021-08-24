@@ -13,6 +13,7 @@ import lombok.Getter;
 @Getter
 public enum ResultCodeEnum {
     SUCCESS(true,20,"成功"),
+    SUCCESS_NO_MESSAGE(true,20,""),
     SUCCESS_LOGIN(true,20,"登陆成功!"),
     SUCCESS_REGISTER(true,20,"注册成功!"),
     ERROR(false,30,"错误"),
@@ -20,10 +21,12 @@ public enum ResultCodeEnum {
     ERROR_JSON_PARSE(false,32,"json解析异常"),
     ERROR_PARAM(false,33,"参数不正确"),
     ERROR_FILE_UPLOAD(false,34,"文件上传错误"),
+    ERROR_SERVE_EXCEPTION(false,35,"服务器异常"),
     ERROR_CAPTCHA_CODE(false,40,"验证码错误!"),
     ERROR_ACTIVATE_CODE(false,41,"激活码错误!"),
     ERROR_PASSWORD(false,42,"密码错误!"),
     ERROR_UN_LOGIN(false,43,"未登录!"),
+    ERROR_PERMISSION_DENIED(false,44,"权限不足!"),
     ERROR_NOT_EXISTS_USER(false,50,"用户不存在!"),
     ERROR_NOT_ACTIVATE_USER(false,51,"账号未激活!"),
     ERROR_REPEAT_ACTIVATE_USER(false,52,"账号重复激活!"),

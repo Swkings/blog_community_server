@@ -39,9 +39,16 @@ public class LikeController implements GlobalConstant {
 
     @PostMapping(path = "/like")
     @ApiOperation(value = "点赞")
-    public ReturnData like(int entityType, int entityId, int entityUserId, int postId) {
+    public ReturnData like(@RequestBody Map<String, Object> params) {
         User user = userHolder.getUser();
 
+        if(!params.containsKey("postId") || !params.containsKey("entityId") || !params.containsKey("entityUserId")){
+            return ReturnData.error().message("参数错误");
+        }
+        int entityType=(int)params.get("entityType");
+        int entityId=(int)params.get("entityId");
+        int entityUserId=(int)params.get("entityUserId");
+        int postId=(int)params.get("postId");
         // 点赞
         likeService.like(user.getId(), entityType, entityId, entityUserId);
 

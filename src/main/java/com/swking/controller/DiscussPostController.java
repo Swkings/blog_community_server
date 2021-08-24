@@ -13,12 +13,14 @@ import com.swking.type.Pagination;
 import com.swking.type.ResultCodeEnum;
 import com.swking.type.ReturnData;
 import com.swking.util.GlobalConstant;
+import com.swking.util.RedisKeyUtil;
 import com.swking.util.UserHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +56,15 @@ public class DiscussPostController implements GlobalConstant {
     @Autowired
     private EventProducer eventProducer;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
 
-    @GetMapping(path = "/")
+
+    @GetMapping(path = "/index")
     @ApiOperation("community默认页")
     public ReturnData getCommunity(Pagination page){
         page.setRows(discussPostService.findDiscussPostRows(0));
-        page.setPath("/community");
+        page.setPath("/community/index");
 
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
         List<Map<String, Object>> postUserList = new ArrayList<>();
@@ -72,6 +77,11 @@ public class DiscussPostController implements GlobalConstant {
 
                 long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
                 map.put("likeCount", likeCount);
+
+                // 点赞状态
+                int likeStatus = userHolder.getUser() == null ? 0 :
+                        likeService.findEntityLikeStatus(userHolder.getUser().getId(), ENTITY_TYPE_POST, post.getId());
+                map.put("likeStatus", likeStatus);
 
                 postUserList.add(map);
             }
@@ -195,5 +205,81 @@ public class DiscussPostController implements GlobalConstant {
         data.put("comments", commentVoList);
         data.put("pagination", page);
         return ReturnData.success(ResultCodeEnum.SUCCESS).data(data);
+    }
+
+    // 置顶
+    @ApiOperation("置顶")
+    @PostMapping(path = "/top")
+    public ReturnData setTop(@RequestBody Map<String, Object> params) {
+        if(!params.containsKey("id")){
+            return ReturnData.error().message("帖子为空");
+        }
+        int id = (int) params.get("id");
+        DiscussPost discussPost = discussPostService.findDiscussPostById(id);
+        if(discussPost.getType()==0){
+            discussPostService.updateType(id, 1);
+        }else{
+            discussPostService.updateType(id, 0);
+        }
+        // 触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(userHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        return ReturnData.success().message(discussPost.getType()==0?"置顶成功":"取消置顶成功");
+    }
+
+    // 加精
+    @ApiOperation("加精")
+    @PostMapping(path = "/wonderful")
+    public ReturnData setWonderful(@RequestBody Map<String, Object> params) {
+        if(!params.containsKey("id")){
+            return ReturnData.error().message("帖子为空");
+        }
+        int id = (int) params.get("id");
+        DiscussPost discussPost = discussPostService.findDiscussPostById(id);
+        if(discussPost.getStatus()==0){
+            discussPostService.updateStatus(id, 1);
+        }else{
+            discussPostService.updateStatus(id, 0);
+        }
+
+        // 触发发帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_PUBLISH)
+                .setUserId(userHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        // 计算帖子分数
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey, id);
+
+        return ReturnData.success().message(discussPost.getStatus()==0?"加精成功":"取消加精成功");
+    }
+
+    // 删除
+    @ApiOperation("删除")
+    @PostMapping(path = "/delete")
+    public ReturnData setDelete(@RequestBody Map<String, Object> params) {
+        if(!params.containsKey("id")){
+            return ReturnData.error().message("帖子为空");
+        }
+        int id = (int) params.get("id");
+        discussPostService.updateStatus(id, 2);
+
+        // 触发删帖事件
+        Event event = new Event()
+                .setTopic(TOPIC_DELETE)
+                .setUserId(userHolder.getUser().getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(id);
+        eventProducer.fireEvent(event);
+
+        return ReturnData.success().message("删除成功");
     }
 }

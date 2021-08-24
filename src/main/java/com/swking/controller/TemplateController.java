@@ -67,4 +67,10 @@ public class TemplateController implements GlobalConstant {
     public String getErrorPage() {
         return "/error/500";
     }
+
+    @GetMapping(path = "/denied")
+    @ApiOperation(value = "错误页", httpMethod = "GET")
+    public String getDeniedPage() {
+        return "/error/404";
+    }
 }
