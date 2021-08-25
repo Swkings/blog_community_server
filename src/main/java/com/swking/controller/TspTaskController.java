@@ -2,12 +2,15 @@ package com.swking.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.swking.entity.TSPEvent;
 import com.swking.entity.TspTask;
+import com.swking.event.TSPEventProducer;
 import com.swking.service.LikeService;
 import com.swking.service.TspTaskService;
 import com.swking.type.ReturnData;
 import com.swking.type.TSPData;
 import com.swking.util.BlogCommunityUtil;
+import com.swking.util.GlobalConstant;
 import com.swking.util.TSPUtil;
 import com.swking.util.UserHolder;
 import io.swagger.annotations.Api;
@@ -33,7 +36,7 @@ import java.util.Map;
 @RestController
 @Api(tags = "TSP Solver API")
 @RequestMapping("/tsp-solver")
-public class TspTaskController {
+public class TspTaskController implements GlobalConstant {
 
     @Value("${blogCommunity.path.tsp-file}")
     private String tspFileDir;
@@ -43,6 +46,9 @@ public class TspTaskController {
 
     @Autowired
     private TspTaskService tspTaskService;
+
+    @Autowired
+    private TSPEventProducer tspEventProducer;
 
     @GetMapping(path = "/index")
     @ApiOperation("index")
@@ -75,10 +81,16 @@ public class TspTaskController {
                 .setProgress(0)
                 .setCreateTime(new Date());
 
-        System.out.println(tspTask);
         tspTaskService.save(tspTask);
+        System.out.println(tspTask);
         // TODO: 开始任务
-        return ReturnData.success().data("returnFile", tspData);
+        TSPEvent tspEvent = new TSPEvent()
+                .setTopic(TOPIC_TSP)
+                .setId(tspTask.getId())
+                .setTspData(tspData);
+        tspEventProducer.fireTSP(tspEvent);
+
+        return ReturnData.success().data("tspData", tspData);
     }
 
     @GetMapping(path = "/myTask")
@@ -86,6 +98,17 @@ public class TspTaskController {
     public ReturnData myTask(){
         List<TspTask> list = tspTaskService.findTspTasks(userHolder.getUser().getId());
         return ReturnData.success().data("taskList", list);
+    }
+
+    @GetMapping(path = "/viewSolution/{id}")
+    @ApiOperation("查看结果")
+    public ReturnData viewSolution(@PathVariable("id") int id){
+        TspTask tspTask = tspTaskService.getById(id);
+        if(tspTask.getProgress()<100){
+            return ReturnData.error().message("任务未完成");
+        }
+        TSPData tspData = TSPUtil.File2Object(tspTask.getSolutionFilePath(), TSPData.class);
+        return ReturnData.success().data("tspData", tspData);
     }
 
 }

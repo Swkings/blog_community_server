@@ -2,6 +2,7 @@ package com.swking.event;
 
 import com.alibaba.fastjson.JSONObject;
 import com.swking.entity.Event;
+import com.swking.entity.TSPEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -25,4 +26,5 @@ public class EventProducer {
         // 将事件发布到指定的主题
         kafkaTemplate.send(event.getTopic(), JSONObject.toJSONString(event));
     }
+
 }

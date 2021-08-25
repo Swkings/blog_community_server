@@ -67,6 +67,20 @@ spring:
     user:
       name: swking
       password: root
+  # TaskExecutionProperties
+  task:
+    execution:
+      pool:
+        # 线程池中核心线程数量
+        core-size: 5
+        # 线程池不够用时，线程最大数量
+        max-size: 15
+        # 队列长度，线程多时缓冲
+        queue-capacity: 100
+    # TaskSchedulingProperties
+    scheduling:
+      pool:
+        size: 5
 
 # MybatisProperties
 mybatis-plus:

@@ -12,6 +12,7 @@
             <result property="dimension" column="dimension" jdbcType="INTEGER"/>
             <result property="edgeWeightType" column="edge_weight_type" jdbcType="VARCHAR"/>
             <result property="filePath" column="file_path" jdbcType="VARCHAR"/>
+            <result property="solutionFilePath" column="solution_file_path" jdbcType="VARCHAR"/>
             <result property="userId" column="user_id" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="progress" column="progress" jdbcType="INTEGER"/>
@@ -21,7 +22,7 @@
     <sql id="Base_Column_List">
         id,name,comment,
         type,dimension,edge_weight_type,
-        file_path,user_id,status,
+        file_path,solution_file_path,user_id,status,
         progress,create_time
     </sql>
 </mapper>

@@ -95,7 +95,6 @@ public class DiscussPostController implements GlobalConstant {
     @PostMapping(path = "/add")
     @ApiOperation(value = "发布帖子")
     public ReturnData addDiscussPost(@RequestBody DiscussPost post) {
-        System.out.println(post);
         User user = userHolder.getUser();
         if (user == null) {
             return ReturnData.error(ResultCodeEnum.ERROR_UN_LOGIN);

@@ -79,6 +79,11 @@ public interface GlobalConstant {
     String TOPIC_SHARE = "share";
 
     /**
+     * 主题: TSP
+     */
+    String TOPIC_TSP= "tsp";
+
+    /**
      * 系统用户ID
      */
     int SYSTEM_USER_ID = 1;

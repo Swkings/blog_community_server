@@ -1,9 +1,6 @@
 package com.swking.config;
 
-import com.swking.interceptor.DataInterceptor;
-import com.swking.interceptor.LoginRequiredInterceptor;
-import com.swking.interceptor.LoginTicketInterceptor;
-import com.swking.interceptor.MessageInterceptor;
+import com.swking.interceptor.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,6 +52,9 @@ public class WebMVCConfig implements WebMvcConfigurer{
 //    }
 
     @Autowired
+    private TestInterceptor testInterceptor;
+
+    @Autowired
     private LoginTicketInterceptor loginTicketInterceptor;
 
     // 已经用security做权限控制了
@@ -69,6 +69,11 @@ public class WebMVCConfig implements WebMvcConfigurer{
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
+        // registry.addInterceptor(testInterceptor)
+        //         // 不拦截静态资源
+        //         .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");
+
         registry.addInterceptor(loginTicketInterceptor)
                 // 不拦截静态资源
                 .excludePathPatterns("/**/*/*.css", "/**/*/*.js", "/**/*/*.png", "/**/*/*.jpg", "/**/*/*.jpeg");

@@ -43,6 +43,9 @@ public class TspTask implements Serializable {
     @ApiModelProperty(value = "存储路径")
     private String filePath;
 
+    @ApiModelProperty(value = "解决方案存储路径")
+    private String solutionFilePath;
+
     @ApiModelProperty(value = "用户id")
     private Integer userId;
 

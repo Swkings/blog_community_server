@@ -57,4 +57,9 @@ public class TSPData {
     @JsonProperty(value = "NODE_COORD_SECTION")
     private List<Node> NODE_COORD_SECTION;
 
+    @ApiModelProperty(value = "解决方案")
+    @JSONField(name = "SOLUTION")
+    @JsonProperty(value = "SOLUTION")
+    private List<Integer> SOLUTION;
+
 }
