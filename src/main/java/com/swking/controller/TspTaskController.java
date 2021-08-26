@@ -100,6 +100,16 @@ public class TspTaskController implements GlobalConstant {
         return ReturnData.success().data("taskList", list);
     }
 
+    @GetMapping(path = "/deleteTask/{id}")
+    @ApiOperation("删除任务")
+    public ReturnData deleteTask(@PathVariable("id") int id){
+        if(tspTaskService.deleteTask(id)==1){
+            return ReturnData.success().message("删除成功");
+        }else{
+            return ReturnData.error().message("删除失败");
+        }
+    }
+
     @GetMapping(path = "/viewSolution/{id}")
     @ApiOperation("查看结果")
     public ReturnData viewSolution(@PathVariable("id") int id){
@@ -110,5 +120,7 @@ public class TspTaskController implements GlobalConstant {
         TSPData tspData = TSPUtil.File2Object(tspTask.getSolutionFilePath(), TSPData.class);
         return ReturnData.success().data("tspData", tspData);
     }
+
+
 
 }

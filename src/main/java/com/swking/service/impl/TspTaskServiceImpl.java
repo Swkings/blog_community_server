@@ -6,9 +6,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.swking.entity.TspTask;
 import com.swking.service.TspTaskService;
 import com.swking.dao.TspTaskMapper;
+import com.swking.util.BlogCommunityUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -37,6 +40,29 @@ public class TspTaskServiceImpl extends ServiceImpl<TspTaskMapper, TspTask>
         UpdateWrapper<TspTask> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id).set("progress", progress);
         return tspTaskMapper.update(null, updateWrapper);
+    }
+
+    public int deleteTask(int id){
+        TspTask tspTask = tspTaskMapper.selectById(id);
+        String filePath = tspTask.getFilePath();
+        String solutionFilePath = tspTask.getSolutionFilePath();
+        int deleteSuccess = tspTaskMapper.deleteById(id);
+        if(deleteSuccess==1){
+            File file;
+            if(!StringUtils.isBlank(filePath)){
+                file = new File(filePath);
+                if(!file.isDirectory()){
+                    file.delete();
+                }
+            }
+            if(!StringUtils.isBlank(solutionFilePath)){
+                file = new File(solutionFilePath);
+                if(!file.isDirectory()){
+                    file.delete();
+                }
+            }
+        }
+        return deleteSuccess;
     }
 }
 

@@ -13,4 +13,6 @@ public interface TspTaskService extends IService<TspTask> {
     public List<TspTask> findTspTasks(int userId);
     public int updateTspTasksSolution(int id, String solutionFilePath, int progress);
     public int updateTspTasksProgress(int id, int progress);
+    public int deleteTask(int id);
+
 }

@@ -56,6 +56,6 @@ public class TSPEventConsumer implements GlobalConstant {
         // 将TSP数据存文件
         TSPUtil.Object2File(filePath, solution);
         tspTaskService.updateTspTasksSolution(tspEvent.getId(), filePath, 100);
-        log.info("解决成功!");
+        log.info("成功解决!");
     }
 }
